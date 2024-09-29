@@ -20,6 +20,12 @@ async function bootstrap() {
     credentials: true,
   });
 
+  app.enableCors({
+    origin: 'https://currency-converter-wstn.netlify.app',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+
   await app.listen(3000);
 }
 bootstrap();
