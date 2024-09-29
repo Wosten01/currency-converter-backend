@@ -141,7 +141,7 @@ export class CurrencyService {
       if (currency == code) {
         randomizedRates[currency] = 1;
       } else {
-        randomizedRates[currency] = this.randomizeRate(rate);
+        randomizedRates[currency] = rate;
       }
     }
 
@@ -157,13 +157,6 @@ export class CurrencyService {
 
     const rates = fromRates[to];
 
-    return this.randomizeRate(rates);
-  }
-
-  private randomizeRate(rate: number): number {
-    return rate;
-    // const x = Math.round(Math.random() * 10);
-    // const randomFactor = x * 0.0002 - 0.0001;
-    // return rate + randomFactor;
+    return rates;
   }
 }
