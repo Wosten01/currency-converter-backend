@@ -5,6 +5,11 @@ import { CurrencyService } from './currency.service';
 export class CurrencyController {
   constructor(private readonly currencyService: CurrencyService) {}
 
+  @Get('all')
+  getAvailableCurrencies() {
+    return this.currencyService.getAvailableCurrencies();
+  }
+
   @Get(':code')
   findByCode(@Param('code') code: string) {
     if (code.length != 3) {

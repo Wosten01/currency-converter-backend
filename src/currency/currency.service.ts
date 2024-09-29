@@ -2,6 +2,18 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CurrencyService {
+  private currencyNames = {
+    AUD: 'Австралийский доллар',
+    CAD: 'Канадский доллар',
+    CHF: 'Швейцарский франк',
+    CNY: 'Китайский юань',
+    EUR: 'Евро',
+    GBP: 'Фунт стерлингов Великобритании',
+    JPY: 'Японская иена',
+    RUB: 'Российский рубль',
+    USD: 'Доллар США',
+  };
+
   private exchangeRates = {
     USD: {
       USD: 1,
@@ -158,5 +170,9 @@ export class CurrencyService {
     const rates = fromRates[to];
 
     return rates;
+  }
+
+  getAvailableCurrencies() {
+    return this.currencyNames;
   }
 }
