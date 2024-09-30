@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { AppController } from 'src/app.controller';
 
 @Injectable()
 export class LocationService {
+  private readonly logger = new Logger(AppController.name);
+
   private currencyByLanguage = {
     'en-US': 'USD', // США
     'en-GB': 'GBP', // Великобритания
@@ -42,18 +45,22 @@ export class LocationService {
   getCurrencyByLanguage(language: string): string {
     const currency = this.currencyByLanguage[language];
     if (currency) {
+      this.logger.debug(`Requested currency for language: ${language}`);
       return currency;
     }
 
-    // Если точное соответствие не найдено, используем язык (например, 'en', 'ru')
     const baseLanguage = language.split('-')[0];
     if (baseLanguage === 'en') {
-      return 'USD'; // По умолчанию для английского — доллар
+      this.logger.log(`Base language is 'en', returning 'USD'`);
+      return 'USD';
     } else if (baseLanguage === 'ru') {
-      return 'RUB'; // По умолчанию для русского — рубль
+      this.logger.log(`Base language is 'ru', returning 'RUB'`);
+      return 'RUB';
     }
 
-    // Другие варианты валют
-    return 'USD'; // По умолчанию USD, если не удалось определить
+    this.logger.warn(
+      `Currency not found for language: ${language}, returning default 'USD'`,
+    );
+    return 'USD';
   }
 }

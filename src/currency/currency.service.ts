@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class CurrencyService {
+  private readonly logger = new Logger(CurrencyService.name);
+
   private currencyNames = {
     AUD: 'Австралийский доллар',
     CAD: 'Канадский доллар',
@@ -138,41 +140,38 @@ export class CurrencyService {
   };
 
   findAll() {
+    this.logger.log('Fetching all exchange rates');
     return this.exchangeRates;
   }
 
   findByCode(code: string) {
+    this.logger.log(`Fetching exchange rates for currency: ${code}`);
     const rates = this.exchangeRates[code];
     if (!rates) {
+      this.logger.warn(`Currency code ${code} not found`);
       return null;
     }
 
-    const randomizedRates = {};
-
-    for (const [currency, rate] of Object.entries<number>(rates)) {
-      if (currency == code) {
-        randomizedRates[currency] = 1;
-      } else {
-        randomizedRates[currency] = rate;
-      }
-    }
-
-    return randomizedRates;
-  }
-
-  getExchangeRate(from: string, to: string) {
-    const fromRates = this.exchangeRates[from];
-
-    if (!fromRates || !fromRates[to]) {
-      return null;
-    }
-
-    const rates = fromRates[to];
-
+    this.logger.log(`Returning rates for currency: ${code}`);
     return rates;
   }
 
+  getExchangeRate(from: string, to: string) {
+    this.logger.log(`Getting exchange rate from ${from} to ${to}`);
+    const fromRates = this.exchangeRates[from];
+
+    if (!fromRates || !fromRates[to]) {
+      this.logger.error(`Exchange rate from ${from} to ${to} not found`);
+      return null;
+    }
+
+    const rate = fromRates[to];
+    this.logger.log(`Exchange rate from ${from} to ${to} is ${rate}`);
+    return rate;
+  }
+
   getAvailableCurrencies() {
+    this.logger.log('Fetching all available currencies');
     return this.currencyNames;
   }
 }

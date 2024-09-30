@@ -8,7 +8,7 @@ export class LocationController {
   @Get('get-currency')
   getCurrency(@Req() req: Request) {
     const language = req.headers['accept-language'];
-    const preferredLanguage = language.split(',')[0]; // Берем первый язык из заголовка
+    const preferredLanguage = language.split(',')[0];
     const currency =
       this.locationService.getCurrencyByLanguage(preferredLanguage);
 
