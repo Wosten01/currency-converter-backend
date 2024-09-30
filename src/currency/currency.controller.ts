@@ -11,7 +11,9 @@ export class CurrencyController {
   }
 
   @Get(':code')
-  findByCode(@Param('code') code: string) {
+  findByCode(@Param('code') codeOriginal: string) {
+    const code = codeOriginal.toUpperCase();
+
     if (code.length != 3) {
       throw new BadRequestException({
         statusCode: 400,
@@ -20,7 +22,7 @@ export class CurrencyController {
       });
     }
 
-    const currency = this.currencyService.findByCode(code.toUpperCase());
+    const currency = this.currencyService.findByCode(code);
 
     const currentDate = new Date().toISOString();
 

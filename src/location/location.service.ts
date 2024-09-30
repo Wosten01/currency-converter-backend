@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { AppController } from 'src/app.controller';
+import { AppController } from '../app.controller';
 
 @Injectable()
 export class LocationService {
