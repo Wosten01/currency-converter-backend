@@ -11,7 +11,7 @@ export class CurrencyController {
   }
 
   @Get(':code')
-  findByCode(@Param('code') codeOriginal: string) {
+  async findByCode(@Param('code') codeOriginal: string) {
     const code = codeOriginal.toUpperCase();
 
     if (code.length != 3) {
@@ -22,7 +22,7 @@ export class CurrencyController {
       });
     }
 
-    const currency = this.currencyService.findByCode(code);
+    const currency = await this.currencyService.findByCode(code);
 
     const currentDate = new Date().toISOString();
 
@@ -43,11 +43,14 @@ export class CurrencyController {
   }
 
   @Get(':from/to/:to')
-  getExchangeRate(@Param('from') from: string, @Param('to') to: string) {
+  async getExchangeRate(@Param('from') from: string, @Param('to') to: string) {
     const fromUpper = from.toUpperCase();
     const toUpper = to.toUpperCase();
 
-    const amount = this.currencyService.getExchangeRate(fromUpper, toUpper);
+    const amount = await this.currencyService.getExchangeRate(
+      fromUpper,
+      toUpper,
+    );
     const currentDate = new Date().toISOString();
 
     if (amount === null) {

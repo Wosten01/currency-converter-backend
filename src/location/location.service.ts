@@ -22,9 +22,6 @@ export class LocationService {
 
   async getCurrencyByLanguage(language: string): Promise<string> {
     const currency = await this.getCurrencyFromDB(language);
-
-    console.log();
-
     if (currency) {
       this.logger.debug(`Requested currency for language: ${language}`);
       return currency;
