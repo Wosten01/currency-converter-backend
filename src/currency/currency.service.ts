@@ -1,20 +1,21 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class CurrencyService {
   private readonly logger = new Logger(CurrencyService.name);
 
-  private currencyNames = {
-    AUD: 'Австралийский доллар',
-    CAD: 'Канадский доллар',
-    CHF: 'Швейцарский франк',
-    CNY: 'Китайский юань',
-    EUR: 'Евро',
-    GBP: 'Фунт стерлингов Великобритании',
-    JPY: 'Японская иена',
-    RUB: 'Российский рубль',
-    USD: 'Доллар США',
-  };
+  // private currencyNames = {
+  //   AUD: 'Австралийский доллар',
+  //   CAD: 'Канадский доллар',
+  //   CHF: 'Швейцарский франк',
+  //   CNY: 'Китайский юань',
+  //   EUR: 'Евро',
+  //   GBP: 'Фунт стерлингов Великобритании',
+  //   JPY: 'Японская иена',
+  //   RUB: 'Российский рубль',
+  //   USD: 'Доллар США',
+  // };
 
   private exchangeRates = {
     USD: {
@@ -159,6 +160,7 @@ export class CurrencyService {
   getExchangeRate(from: string, to: string) {
     this.logger.log(`Getting exchange rate from ${from} to ${to}`);
     const fromRates = this.exchangeRates[from];
+    this.logger.debug(fromRates);
 
     if (!fromRates || !fromRates[to]) {
       this.logger.error(`Exchange rate from ${from} to ${to} not found`);
@@ -170,8 +172,17 @@ export class CurrencyService {
     return rate;
   }
 
-  getAvailableCurrencies() {
+  async getAvailableCurrencies() {
     this.logger.log('Fetching all available currencies');
-    return this.currencyNames;
+    const client = new PrismaClient();
+    const currencies = await client.currencyEntity.findMany({
+      select: { code: true, name: true },
+    });
+    const currencyObject = currencies.reduce((acc, item) => {
+      acc[item.code] = item.name;
+      return acc;
+    }, {});
+
+    return currencyObject;
   }
 }

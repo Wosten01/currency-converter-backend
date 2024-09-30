@@ -6,11 +6,11 @@ export class LocationController {
   constructor(private readonly locationService: LocationService) {}
 
   @Get('get-currency')
-  getCurrency(@Req() req: Request) {
+  async getCurrency(@Req() req: Request) {
     const language = req.headers['accept-language'];
     const preferredLanguage = language.split(',')[0];
     const currency =
-      this.locationService.getCurrencyByLanguage(preferredLanguage);
+      await this.locationService.getCurrencyByLanguage(preferredLanguage);
 
     return {
       language: preferredLanguage,

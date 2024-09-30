@@ -12,28 +12,28 @@ describe('LocationService', () => {
     service = module.get<LocationService>(LocationService);
   });
 
-  it('should return the correct currency for a known language', () => {
-    const currency = service.getCurrencyByLanguage('en-US');
+  it('should return the correct currency for a known language', async () => {
+    const currency = await service.getCurrencyByLanguage('en-US');
     expect(currency).toBe('USD');
   });
 
-  it('should return USD for any English base language', () => {
-    const currency = service.getCurrencyByLanguage('en-XX');
+  it('should return USD for any English base language', async () => {
+    const currency = await service.getCurrencyByLanguage('en-XX');
     expect(currency).toBe('USD');
   });
 
-  it('should return RUB for any Russian base language', () => {
-    const currency = service.getCurrencyByLanguage('ru-XX');
+  it('should return RUB for any Russian base language', async () => {
+    const currency = await service.getCurrencyByLanguage('ru-XX');
     expect(currency).toBe('RUB');
   });
 
-  it('should return EUR for any French base language', () => {
-    const currency = service.getCurrencyByLanguage('fr-FR');
+  it('should return EUR for any French base language', async () => {
+    const currency = await service.getCurrencyByLanguage('fr-FR');
     expect(currency).toBe('EUR');
   });
 
-  it('should return USD for any French base language', () => {
-    const currency = service.getCurrencyByLanguage('xx-XX');
+  it('should return USD for any French base language', async () => {
+    const currency = await service.getCurrencyByLanguage('xx-XX');
     expect(currency).toBe('USD');
   });
 });

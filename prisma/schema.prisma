@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model LanguagesAndCurrencies {
+  id         Int      @id @default(autoincrement())
+  name       String
+  currencyId Int
+  currency   CurrencyEntity  @relation(fields: [currencyId], references: [id])
+
+  @@index([currencyId])
+}
+model CurrencyEntity {
+  id   Int    @id @default(autoincrement())
+  name String
+  code String
+
+  LanguagesAndCurrencies LanguagesAndCurrencies[]
+}
