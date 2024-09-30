@@ -1,14 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { AppController } from '../app.controller';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from 'prisma/prisma.service';
 
 @Injectable()
 export class LocationService {
+  constructor(private readonly prisma: PrismaService) {}
   private readonly logger = new Logger(AppController.name);
 
   private async getCurrencyFromDB(language: string) {
-    const client = new PrismaClient();
-    const result = await client.languagesAndCurrencies.findFirst({
+    const result = await this.prisma.languagesAndCurrencies.findFirst({
       where: {
         name: language,
       },

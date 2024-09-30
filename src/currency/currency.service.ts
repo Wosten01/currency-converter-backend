@@ -1,14 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from 'prisma/prisma.service';
 
 @Injectable()
 export class CurrencyService {
+  constructor(private readonly prisma: PrismaService) {}
   private readonly logger = new Logger(CurrencyService.name);
-  private client = new PrismaClient();
 
   async findByCode(code: string) {
     this.logger.log(`Fetching exchange rates for currency: ${code}`);
-    const currency = await this.client.currencyEntity.findFirst({
+    const currency = await this.prisma.currencyEntity.findFirst({
       where: { code },
       include: { exchangeRatesFrom: { include: { to: true } } },
     });
@@ -18,7 +18,7 @@ export class CurrencyService {
       return null;
     }
 
-    const exchangeRates = await this.client.exchangeRate.findMany({
+    const exchangeRates = await this.prisma.exchangeRate.findMany({
       where: { fromId: currency.id },
     });
 
@@ -26,7 +26,7 @@ export class CurrencyService {
 
     await Promise.all(
       exchangeRates.map(async (exchangeRate) => {
-        const currency = await this.client.currencyEntity.findFirst({
+        const currency = await this.prisma.currencyEntity.findFirst({
           where: { id: exchangeRate.toId },
           include: { exchangeRatesFrom: { include: { to: true } } },
         });
@@ -63,8 +63,7 @@ export class CurrencyService {
 
   async getAvailableCurrencies() {
     this.logger.log('Fetching all available currencies');
-    const client = new PrismaClient();
-    const currencies = await client.currencyEntity.findMany({
+    const currencies = await this.prisma.currencyEntity.findMany({
       select: { code: true, name: true },
     });
     const currencyObject = currencies.reduce((acc, item) => {
