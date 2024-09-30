@@ -21,4 +21,21 @@ model CurrencyEntity {
   code String
 
   LanguagesAndCurrencies LanguagesAndCurrencies[]
+  
+  exchangeRatesFrom      ExchangeRate[]   @relation("ExchangeRateFrom")
+  exchangeRatesTo        ExchangeRate[]   @relation("ExchangeRateTo")
+}
+
+
+model ExchangeRate {
+  id        Int           @id @default(autoincrement())
+  fromId    Int
+  toId      Int
+  rate      Float
+
+  from      CurrencyEntity @relation("ExchangeRateFrom", fields: [fromId], references: [id])
+  to        CurrencyEntity @relation("ExchangeRateTo", fields: [toId], references: [id])
+
+  @@index([fromId])
+  @@index([toId])
 }

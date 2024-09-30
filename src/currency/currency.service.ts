@@ -5,18 +5,6 @@ import { PrismaClient } from '@prisma/client';
 export class CurrencyService {
   private readonly logger = new Logger(CurrencyService.name);
 
-  // private currencyNames = {
-  //   AUD: 'Австралийский доллар',
-  //   CAD: 'Канадский доллар',
-  //   CHF: 'Швейцарский франк',
-  //   CNY: 'Китайский юань',
-  //   EUR: 'Евро',
-  //   GBP: 'Фунт стерлингов Великобритании',
-  //   JPY: 'Японская иена',
-  //   RUB: 'Российский рубль',
-  //   USD: 'Доллар США',
-  // };
-
   private exchangeRates = {
     USD: {
       USD: 1,
